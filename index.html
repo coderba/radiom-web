@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radıom - Türkiye'nin En İyi Radyo Uygulaması</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #1a1f2e 0%, #0f1419 100%);
+            --accent-pink: #ff2d92;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: var(--primary-gradient);
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255,45,146,0.15) 0%, transparent 70%);
+            top: -300px;
+            right: -200px;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .bg-animation::after {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 70%);
+            bottom: -200px;
+            left: -100px;
+            animation: float 25s infinite ease-in-out reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, 50px) scale(1.1); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            background: rgba(15, 20, 25, 0.8);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover {
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 50px 50px;
+            gap: 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .hero-content {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(255,45,146,0.2);
+            border: 1px solid rgba(255,45,146,0.3);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent-pink);
+            margin-bottom: 24px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .hero h1 {
+            font-size: 72px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #ffffff 0%, #c7c7cc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 40px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 18px 36px;
+            background: linear-gradient(135deg, var(--accent-pink) 0%, #ec4899 100%);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(255,45,146,0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(255,45,146,0.4);
+        }
+
+        .btn-secondary {
+            padding: 18px 36px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            color: white;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-3px);
+        }
+
+        /* Phone Mockup */
+        .hero-visual {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        .phone-mockup {
+            width: 320px;
+            height: 650px;
+            background: #000;
+            border-radius: 45px;
+            padding: 12px;
+            box-shadow: 
+                0 50px 100px rgba(0,0,0,0.5),
+                0 0 0 1px rgba(255,255,255,0.1),
+                inset 0 0 20px rgba(255,255,255,0.05);
+            position: relative;
+            transform: perspective(1000px) rotateY(-15deg) rotateX(5deg);
+            transition: transform 0.5s;
+            animation: phoneFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes phoneFloat {
+            0%, 100% { transform: perspective(1000px) rotateY(-15deg) rotateX(5deg) translateY(0); }
+            50% { transform: perspective(1000px) rotateY(-15deg) rotateX(5deg) translateY(-20px); }
+        }
+
+        .phone-mockup:hover {
+            transform: perspective(1000px) rotateY(-5deg) rotateX(0deg) scale(1.02);
+            animation: none;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #1a2f23 0%, #0f1419 50%, #1a1f2e 100%);
+            border-radius: 35px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 30px;
+            background: #000;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            z-index: 10;
+        }
+
+        .screen-content {
+            padding: 50px 20px 20px;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .app-header {
+            margin-bottom: 20px;
+        }
+
+        .app-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .app-subtitle {
+            font-size: 13px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .search-bar {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .categories {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .category {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .category.active {
+            background: var(--accent-pink);
+        }
+
+        .station-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .station-card {
+            background: rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .station-card:nth-child(1) { background: linear-gradient(90deg, rgba(236, 72, 153, 0.3), rgba(236, 72, 153, 0.1)); }
+        .station-card:nth-child(2) { background: linear-gradient(90deg, rgba(239, 68, 68, 0.3), rgba(239, 68, 68, 0.1)); }
+        .station-card:nth-child(3) { background: linear-gradient(90deg, rgba(59, 130, 246, 0.3), rgba(59, 130, 246, 0.1)); }
+
+        .station-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
+            background: rgba(255,255,255,0.9);
+            color: #000;
+        }
+
+        .station-info {
+            flex: 1;
+        }
+
+        .station-name {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 2px;
+        }
+
+        .station-meta {
+            font-size: 12px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .station-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-header h2 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .section-header p {
+            font-size: 18px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,45,146,0.1) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255,45,146,0.3);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent-pink) 0%, var(--accent-purple) 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 24px;
+        }
+
+        .feature-card h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: rgba(255,255,255,0.6);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        /* Screenshots Gallery */
+        .gallery {
+            padding: 100px 50px;
+            background: rgba(0,0,0,0.2);
+        }
+
+        .gallery-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .screenshots {
+            display: flex;
+            gap: 30px;
+            overflow-x: auto;
+            padding: 40px 0;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .screenshots::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .screenshots::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+        }
+
+        .screenshots::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+        }
+
+        .screenshot-item {
+            flex: 0 0 280px;
+            height: 560px;
+            background: #000;
+            border-radius: 40px;
+            overflow: hidden;
+            scroll-snap-align: center;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+            transition: transform 0.3s;
+            position: relative;
+        }
+
+        .screenshot-item:hover {
+            transform: scale(1.05);
+        }
+
+        .screenshot-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Download Section */
+        .download {
+            padding: 120px 50px;
+            text-align: center;
+            position: relative;
+        }
+
+        .download-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .download h2 {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .download p {
+            font-size: 20px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 40px;
+        }
+
+        .app-store-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: #000;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 16px 32px;
+            border-radius: 16px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .app-store-btn:hover {
+            transform: scale(1.05);
+            border-color: rgba(255,255,255,0.4);
+        }
+
+        .app-store-btn svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .btn-text {
+            text-align: left;
+        }
+
+        .btn-text small {
+            display: block;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .btn-text strong {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 50px;
+            text-align: center;
+            border-top: 1px solid var(--glass-border);
+            color: rgba(255,255,255,0.4);
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                gap: 50px;
+            }
+
+            .hero h1 {
+                font-size: 48px;
+            }
+
+            .phone-mockup {
+                width: 280px;
+                height: 570px;
+                transform: none;
+                animation: none;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn 0.8s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <nav>
+        <div class="logo">Radıom</div>
+        <ul class="nav-links">
+            <li><a href="#ozellikler">Özellikler</a></li>
+            <li><a href="#ekranlar">Ekranlar</a></li>
+            <li><a href="#indir">İndir</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content fade-in">
+            <div class="hero-badge">🇹🇷 Türkiye'nin Radyosu</div>
+            <h1>Türk Radyoları<br>Cebinizde</h1>
+            <p>Size özel seçilmiş 100+ Türk radyo istasyonu. Nostalji, haber, spor, müzik ve daha fazlası. Koyu tema, modern arayüz ve kesintisiz dinleme deneyimi.</p>
+            <div class="cta-buttons">
+                <a href="#indir" class="btn-primary">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2v8m0 0l-3-3m3 3l3-3M2 12h20M12 14v8m0 0l-3-3m3 3l3-3"/>
+                    </svg>
+                    App Store'dan İndir
+                </a>
+                <a href="#ozellikler" class="btn-secondary">Daha Fazla Bilgi</a>
+            </div>
+        </div>
+        
+        <div class="hero-visual fade-in delay-1">
+            <div class="phone-mockup">
+                <div class="phone-screen">
+                    <div class="notch"></div>
+                    <div class="screen-content">
+                        <div class="app-header">
+                            <div class="app-title">Radıom</div>
+                            <div class="app-subtitle">Size özel seçilmiş Türk radyoları</div>
+                        </div>
+                        
+                        <div class="search-bar">
+                            <span>🔍</span>
+                            <span>Radyoları, türleri ara</span>
+                        </div>
+
+                        <div class="categories">
+                            <div class="category">Tümü</div>
+                            <div class="category">Acoustic</div>
+                            <div class="category active">Arabesque</div>
+                            <div class="category">Chill</div>
+                        </div>
+
+                        <div style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">Şu an popüler</div>
+                        
+                        <div class="station-list">
+                            <div class="station-card">
+                                <div class="station-icon" style="background: #ff9500; color: white;">90</div>
+                                <div class="station-info">
+                                    <div class="station-name">90'lar</div>
+                                    <div class="station-meta">Nostalgia • İstanbul</div>
+                                </div>
+                                <div class="station-actions">
+                                    <div class="action-btn">♡</div>
+                                    <div class="action-btn">▶</div>
+                                </div>
+                            </div>
+                            
+                            <div class="station-card">
+                                <div class="station-icon" style="background: #ff3b30; color: white;">a</div>
+                                <div class="station-info">
+                                    <div class="station-name">A Haber Radyo</div>
+                                    <div class="station-meta">News • İstanbul</div>
+                                </div>
+                                <div class="station-actions">
+                                    <div class="action-btn">♡</div>
+                                    <div class="action-btn">▶</div>
+                                </div>
+                            </div>
+                            
+                            <div class="station-card">
+                                <div class="station-icon" style="background: #007aff; color: white;">a</div>
+                                <div class="station-info">
+                                    <div class="station-name">A Para Radyo</div>
+                                    <div class="station-meta">Finance • İstanbul</div>
+                                </div>
+                                <div class="station-actions">
+                                    <div class="action-btn">♡</div>
+                                    <div class="action-btn">▶</div>
+                                </div>
+                            </div>
+
+                            <div class="station-card">
+                                <div class="station-icon" style="background: #34c759; color: white;">a</div>
+                                <div class="station-info">
+                                    <div class="station-name">A Spor Radyo</div>
+                                    <div class="station-meta">Sports • İstanbul</div>
+                                </div>
+                                <div class="station-actions">
+                                    <div class="action-btn">♡</div>
+                                    <div class="action-btn">▶</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="ozellikler" class="features">
+        <div class="section-header fade-in">
+            <h2>Neden Radıom?</h2>
+            <p>Türkiye'nin en kapsamlı ve kullanıcı dostu radyo uygulaması</p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card fade-in delay-1">
+                <div class="feature-icon">📻</div>
+                <h3>100+ Canlı İstasyon</h3>
+                <p>İstanbul, Ankara, İzmir ve tüm Türkiye'den yerel ve ulusal radyolar. Pop, rock, haber, spor, dini ve nostalji kanalları.</p>
+            </div>
+            
+            <div class="feature-card fade-in delay-2">
+                <div class="feature-icon">🎨</div>
+                <h3>Zengin Görseller</h3>
+                <p>Her istasyon için özel renk temaları ve gradient arka planlar. Göz yormayan koyu mod desteği.</p>
+            </div>
+            
+            <div class="feature-card fade-in delay-3">
+                <div class="feature-icon">❤️</div>
+                <h3>Favoriler & Oynatma</h3>
+                <p>Sevdiğiniz istasyonları favorilere ekleyin, hızlı erişim sağlayın. Kesintisiz arka planda oynatma.</p>
+            </div>
+            
+            <div class="feature-card fade-in delay-1">
+                <div class="feature-icon">🔍</div>
+                <h3>Akıllı Arama</h3>
+                <p>Tür, şehir veya istasyon adına göre arama yapın. Filtreleme özellikleriyle istediğiniz müziği anında bulun.</p>
+            </div>
+            
+            <div class="feature-card fade-in delay-2">
+                <div class="feature-icon">🌙</div>
+                <h3>Uyku Zamanlayıcı</h3>
+                <p>Uyku modu ile belirlediğiniz süre sonra otomatik kapanma. Rahat bir uyku için ideal.</p>
+            </div>
+            
+            <div class="feature-card fade-in delay-3">
+                <div class="feature-icon">📱</div>
+                <h3>Native iOS</h3>
+                <p>Swift ile yazılmış, optimize edilmiş performans. iPhone ve iPad için tam destek, Dynamic Island uyumluluğu.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="ekranlar" class="gallery">
+        <div class="gallery-container">
+            <div class="section-header fade-in">
+                <h2>Uygulama İçi Görünüm</h2>
+                <p>Tasarım detayları ve kullanıcı deneyimi</p>
+            </div>
+            
+            <div class="screenshots fade-in">
+                <div class="screenshot-item">
+                    <div style="width: 100%; height: 100%; background: linear-gradient(180deg, #1a2f23 0%, #0f1419 100%); padding: 40px 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: 20px;">📻</div>
+                        <div style="font-size: 24px; font-weight: 700;">Ana Ekran</div>
+                        <div style="font-size: 14px; opacity: 0.7; margin-top: 10px;">Tüm istasyonlar ve kategoriler</div>
+                    </div>
+                </div>
+                <div class="screenshot-item">
+                    <div style="width: 100%; height: 100%; background: linear-gradient(180deg, #2d1a2f 0%, #0f1419 100%); padding: 40px 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: 20px;">🎵</div>
+                        <div style="font-size: 24px; font-weight: 700;">Oynatıcı</div>
+                        <div style="font-size: 14px; opacity: 0.7; margin-top: 10px;">Tam ekran oynatma deneyimi</div>
+                    </div>
+                </div>
+                <div class="screenshot-item">
+                    <div style="width: 100%; height: 100%; background: linear-gradient(180deg, #1a2f2d 0%, #0f1419 100%); padding: 40px 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: 20px;">❤️</div>
+                        <div style="font-size: 24px; font-weight: 700;">Favoriler</div>
+                        <div style="font-size: 14px; opacity: 0.7; margin-top: 10px;">Kaydedilmiş istasyonlar</div>
+                    </div>
+                </div>
+                <div class="screenshot-item">
+                    <div style="width: 100%; height: 100%; background: linear-gradient(180deg, #2f2a1a 0%, #0f1419 100%); padding: 40px 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: 20px;">🔍</div>
+                        <div style="font-size: 24px; font-weight: 700;">Arama</div>
+                        <div style="font-size: 14px; opacity: 0.7; margin-top: 10px;">Gelişmiş filtreleme</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="indir" class="download">
+        <div class="download-content fade-in">
+            <h2>Hemen Dinlemeye<br>Başlayın</h2>
+            <p>Radıom'u ücretsiz indirin, Türkiye'nin en iyi radyo istasyonlarına anında erişin. Çevrimdışı çalma listeleri ve kesintisiz yayın kalitesiyle müziğin keyfini çıkarın.</p>
+            
+            <a href="#" class="app-store-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                </svg>
+                <div class="btn-text">
+                    <small>Download on the</small>
+                    <strong>App Store</strong>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Radıom. Tüm hakları saklıdır. | Gizlilik Politikası | Kullanım Koşulları</p>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = "1";
+                    entry.target.style.transform = "translateY(0)";
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Parallax effect for phone mockup
+        document.addEventListener('mousemove', (e) => {
+            const phone = document.querySelector('.phone-mockup');
+            if (phone && window.innerWidth > 968) {
+                const x = (window.innerWidth / 2 - e.pageX) / 50;
+                const y = (window.innerHeight / 2 - e.pageY) / 50;
+                phone.style.transform = `perspective(1000px) rotateY(${-15 + x}deg) rotateX(${5 + y}deg)`;
+            }
+        });
+    </script>
+</body>
+</html>
